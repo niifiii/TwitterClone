@@ -1,3 +1,13 @@
 <h1> App Component </h1>
 
+<mat-toolbar color='primary' class='navbar'>
+  <div> Twitta - A Twitter Clone 👶👶🏻👶🏼👶🏽👶🏾👶🏿</div>
+  <div >
+    <span [routerLink]="[ '/landing' ]">Home</span>
+    <span [routerLink]="[ '/about' ]">About</span>
+    <span [routerLink]="[ '/sign-up' ]">Sign Up</span><span [routerLink]="[ '/login' ]">Login</span> <!-- toggle --><span [routerLink]="[ '/admin/1' ]">Admin</span>
+    <span [routerLink]="[ '/browse-users' ]">Browse Users</span>
+  </div>
+</mat-toolbar>
+
 <router-outlet></router-outlet>
