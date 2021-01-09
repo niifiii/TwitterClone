@@ -16,7 +16,7 @@
         <input type='text' id='name' name='name' formControlName='userName' />
         <br><br>
         <label for='content'>Twitt</label>
-        <textarea id='content' name='content' formControlName='message'></textarea>
+        <textarea id='content' name='content' formControlName='content'></textarea>
         <br><br>
         <button type='button' [disabled]='!twitForm.valid' (click)='onSendTwit()'>Send your twitt 💌</button>
     </form>
@@ -29,6 +29,6 @@
     <br>
     {{ twitPostResponseHeaders }}
     <br>
-    {{ twitPostResponseBody }}
+    {{ twitPostResponseBody | json }}
 
 </main>

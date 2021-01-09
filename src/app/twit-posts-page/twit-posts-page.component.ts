@@ -29,7 +29,7 @@ shouldShowSpinner = false;
   ngOnInit(): void {
     this.twitForm = this._fb.group({
       userName: this._fb.control('', [Validators.required]),
-      message: this._fb.control('', [Validators.required])
+      content: this._fb.control('', [Validators.required])
     })
   }
 
@@ -50,12 +50,12 @@ shouldShowSpinner = false;
   onSendTwit() {
     this.toggleSpinner()
     const userName = this.twitForm.get('userName').value
-    const message = this.twitForm.get('message').value
-    const params = new HttpParams({fromObject: {userName: userName, message: message}})
+    const content = this.twitForm.get('content').value
+    const params = new HttpParams({fromObject: {userName: userName, content: content}})
     const body = params.toString()
-    console.log(message)
+    console.log(content)
     console.log(userName)
-    //this.showPostTwitResponse(body)
+    this.showPostTwitResponse(body)
   }
 
   private showPostTwitResponse(body) {

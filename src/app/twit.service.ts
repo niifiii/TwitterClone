@@ -13,14 +13,14 @@ export interface ITwit {
 })
 export class TwitService {
 
-  twitsServerUrl: string = 'localhost:3000/api';
+  twitsServerUrl: string = 'http://localhost:3000/api';
 
   constructor(private _http: HttpClient) { }
 
   /** POST: add a new twit to the database @ http://localhost:3000/api/post-twit */
-  postTwit(body: any): Observable<HttpResponse<any>> {
+  postTwit(body: ITwit): Observable<HttpResponse<any>> {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Accept', 'application/json')
-    return this._http.post<ITwit>(`${this.twitsServerUrl}/post-twit`, body, { headers, observe: 'response' }).pipe(
+    return this._http.post<any>(`${this.twitsServerUrl}/post-twit`, body, { headers, observe: 'response' }).pipe(
         take(1),
         catchError(this.handleError)
       );
