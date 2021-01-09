@@ -9,8 +9,8 @@ import { routingComponents } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from "./material/material.module";
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
-
-
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule} from '@angular/common/http'
 
 @NgModule({
   declarations: [
@@ -24,7 +24,9 @@ import { PasswordResetPageComponent } from './password-reset-page/password-reset
     AppRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

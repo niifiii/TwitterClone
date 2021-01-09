@@ -1,2 +1,34 @@
 <p>twit-posts-page works!</p>
+<!-- http://localhost:4200/twit-posts/1 -->
+<main>
+    <h1>UserName: Iam A. Person</h1>
+    <p> User Intro: A happy person </p>
+    <p> Twitta Handle: @iamaperson</p>
+    <p> Profile Page Intro: Happy go lucky is my way of life</p>
+        <p> Born December 26 </p>
+        <p> Joined: July 2020</p>
 
+    <p>20 Following</p>
+    <p>161 Followers</p>
+
+    <form [formGroup]='twitForm'>
+        <label for='name'>Name</label>
+        <input type='text' id='name' name='name' formControlName='userName' />
+        <br><br>
+        <label for='content'>Twitt</label>
+        <textarea id='content' name='content' formControlName='message'></textarea>
+        <br><br>
+        <button type='button' [disabled]='!twitForm.valid' (click)='onSendTwit()'>Send your twitt 💌</button>
+    </form>
+
+    <div [style.display]="'none'" #spinner>
+        <mat-spinner></mat-spinner>
+    </div>
+
+    {{ twitForm.value | json }}
+    <br>
+    {{ twitPostResponseHeaders }}
+    <br>
+    {{ twitPostResponseBody }}
+
+</main>
