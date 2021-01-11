@@ -11,6 +11,8 @@ import { BrowseUsersPageComponent } from './browse-users-page/browse-users-page.
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 import { RegisteredComponent } from './registered/registered.component';
+import { AuthService } from './auth.service';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
@@ -19,12 +21,16 @@ const routes: Routes = [
   { path: 'password-reset', component: PasswordResetPageComponent },
 	{ path: 'sign-up', component: SignUpPageComponent },
   { path: 'twit-posts/:userName', component: TwitPostsPageComponent },
-  { path: 'admin/:userName', component: AdminPageComponent },
+  { 
+    path: 'admin', component: AdminPageComponent,
+    canActivate: [AuthService]
+  },
   { path: 'browse-users', component: BrowseUsersPageComponent },
   { path: 'about', component: AboutPageComponent },
   { path: 'password-reset', component: PasswordResetPageComponent },
   { path: 'registered', component: RegisteredComponent},
   { path: 'page-not-found', component: PageNotFoundPageComponent },
+  { path: 'error', component: ErrorPageComponent },
 	{ path: '**', redirectTo: '/page-not-found', pathMatch: 'full' }
 ];
 
@@ -44,5 +50,6 @@ export const routingComponents = [
   BrowseUsersPageComponent,
   AboutPageComponent,
   PasswordResetPageComponent, 
-  RegisteredComponent
+  RegisteredComponent,
+  ErrorPageComponent
 ]
