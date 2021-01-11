@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { TwitService } from '../twit.service';
@@ -12,30 +13,66 @@ import { TwitService } from '../twit.service';
 })
 export class TwitPostsPageComponent implements OnInit, AfterViewInit {
 
-twitForm: FormGroup = null
-twitUrl: string = null
+  twitForm: FormGroup = null
+  twitUrl: string = null
 
-twitPostResponseHeaders: string[];
-twitPostResponseBody: any
+  twitPostResponseHeaders: string[] = [];
+  twitPostResponseBody: any = ''
 
-@ViewChild('spinner') spinner: ElementRef;
+  @ViewChild('spinner', { static: false }) spinner: ElementRef;
 
-shouldShowSpinner = false;
+  shouldShowSpinner = false;
+
+  userName = ''
+
+  twitsGetResponseHeaders: string[] = []
+  twitsGetResponseBody: any = ''
 
   constructor(private _fb: FormBuilder, 
               //private _http: HttpClient,
-              private _twitSvc: TwitService) { }
+              private _twitSvc: TwitService,
+              private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //let userName = this._route.snapshot.paramMap.get('userName').toString()
+    
+    //this.userName = userName
+
+    this._route.paramMap.subscribe( (params: ParamMap) => {
+      let userName = params.get('userName')
+      this.userName = userName
+    })
+
+
+    console.log(this.userName) 
+
     this.twitForm = this._fb.group({
       userName: this._fb.control('', [Validators.required]),
       content: this._fb.control('', [Validators.required])
     })
+
+    this.getTwits();
   }
 
   ngAfterViewInit() {
       //this.spinner.nativeElement.style.display = 'none';
   }
+
+  private getTwits() {
+    const params = new HttpParams().set('page','1')
+    this._twitSvc.getTwits(this.userName, params).subscribe(
+      resp => {
+        // display its headers
+        const keys = resp.headers.keys();
+        this.twitsGetResponseHeaders = keys.map(key =>
+          `${key}: ${resp.headers.get(key)}`);
+  
+        // access the body directly, which is typed as `??`.
+        this.twitsGetResponseBody = { ...resp.body };
+      }
+    )
+  }
+
 
   toggleSpinner() {
     this.shouldShowSpinner = !this.shouldShowSpinner;
@@ -56,6 +93,7 @@ shouldShowSpinner = false;
     console.log(content)
     console.log(userName)
     this.showPostTwitResponse(body)
+    this.getTwits()
   }
 
   private showPostTwitResponse(body) {
@@ -71,7 +109,7 @@ shouldShowSpinner = false;
         // access the body directly, which is typed as `??`.
         this.twitPostResponseBody = { ...resp.body };
       });
-
+      this.twitForm.reset();
       this.toggleSpinner()
   }
 }

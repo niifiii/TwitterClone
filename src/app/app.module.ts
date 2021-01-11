@@ -10,14 +10,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from "./material/material.module";
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http'
+import { HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents,
-    PasswordResetPageComponent,
-
   ],
   imports: [
     BrowserModule,

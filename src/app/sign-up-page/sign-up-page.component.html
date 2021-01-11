@@ -1,1 +1,47 @@
 <p>sign-up-page works!</p>
+
+<form [formGroup]='signupForm'>
+    <div class="form-component-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a Username</mat-label>
+          <input matInput placeholder="Username" formControlName="userName" required>
+          <mat-error *ngIf="signupForm.get('userName').invalid">{{getErrorMessageUserName()}}</mat-error>
+          UserName is invalid: {{signupForm.get('userName').invalid}}
+        </mat-form-field>
+    </div>
+
+    <div class="form-component-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Enter your email</mat-label>
+          <input matInput placeholder="pat@example.com" required formControlName='email'>
+          <mat-error *ngIf="signupForm.get('email').invalid">{{getErrorMessageEmail()}}</mat-error>
+          Email is invalid: {{ signupForm.get('email').invalid }}
+        </mat-form-field>
+    </div>
+
+    <div class="form-component-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Enter your password</mat-label>
+          <input matInput type="password" required formControlName='password'>
+        </mat-form-field>
+    </div>
+
+    <div class="form-component-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Enter your password again</mat-label>
+          <input matInput type="password" required formControlName='confirmPassword'>
+        </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" [disabled]='signupForm.invalid' (click)='onSubmit()'>SignUp</button>
+    
+    <br>
+    signupForm is invalid: {{signupForm.invalid}}
+    <br>
+    <p>
+    {{ registrationPostResponseHeaders }}
+  </p>
+    <br>
+    {{ registrationPostResponseBody|json }}
+
+</form>

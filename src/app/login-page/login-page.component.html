@@ -1,1 +1,28 @@
 <p>login-page works!</p>
+
+<form [formGroup]='loginForm'>
+    <div class="form-component-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a Username</mat-label>
+          <input matInput placeholder="Username" formControlName="userName" required>
+          <mat-error *ngIf="loginForm.get('userName').invalid">{{ getErrorMessageUserName() }}</mat-error>
+          UserName is invalid: {{ loginForm.get('userName').invalid }}
+        </mat-form-field>
+      </div>
+
+    <div class="form-component-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Enter your email</mat-label>
+          <input matInput placeholder="pat@example.com" required formControlName='email'>
+          <mat-error *ngIf="loginForm.get('email').invalid">{{getErrorMessageEmail()}}</mat-error>
+          Email is invalid: {{ loginForm.get('email').invalid }}
+        </mat-form-field>
+    </div>
+    <p>Forgot your password? <a [routerLink]="[ '/password-reset' ]">Click Here</a>.</p>
+
+    <button mat-raised-button color="primary" [disabled]='loginForm.invalid'>Login</button>
+    loginForm is invalid: {{!loginForm.valid}}
+
+
+</form>
+

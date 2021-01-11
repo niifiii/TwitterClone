@@ -10,6 +10,7 @@ import { TwitPostsPageComponent } from './twit-posts-page/twit-posts-page.compon
 import { BrowseUsersPageComponent } from './browse-users-page/browse-users-page.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
+import { RegisteredComponent } from './registered/registered.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
@@ -17,16 +18,18 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'password-reset', component: PasswordResetPageComponent },
 	{ path: 'sign-up', component: SignUpPageComponent },
-  { path: 'twit-posts/:userId', component: TwitPostsPageComponent },
-  { path: 'admin/:userId', component: AdminPageComponent },
+  { path: 'twit-posts/:userName', component: TwitPostsPageComponent },
+  { path: 'admin/:userName', component: AdminPageComponent },
   { path: 'browse-users', component: BrowseUsersPageComponent },
   { path: 'about', component: AboutPageComponent },
+  { path: 'password-reset', component: PasswordResetPageComponent },
+  { path: 'registered', component: RegisteredComponent},
   { path: 'page-not-found', component: PageNotFoundPageComponent },
 	{ path: '**', redirectTo: '/page-not-found', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes)], //, {useHash: true}
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
@@ -37,5 +40,9 @@ export const routingComponents = [
   SignUpPageComponent, 
   TwitPostsPageComponent, 
   AdminPageComponent, 
-  PageNotFoundPageComponent
+  PageNotFoundPageComponent,
+  BrowseUsersPageComponent,
+  AboutPageComponent,
+  PasswordResetPageComponent, 
+  RegisteredComponent
 ]

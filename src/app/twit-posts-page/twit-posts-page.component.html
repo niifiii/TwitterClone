@@ -20,6 +20,15 @@
         <br><br>
         <button type='button' [disabled]='!twitForm.valid' (click)='onSendTwit()'>Send your twitt 💌</button>
     </form>
+<hr>
+<div *ngIf="twitsGetResponseBody.results">
+    <div *ngFor="let item of twitsGetResponseBody.results">
+        <p>{{item.userName}}</p>
+        <p>{{item.comment}}</p>
+        <p>{{item.created}}</p>
+    </div>
+</div>
+
 
     <div [style.display]="'none'" #spinner>
         <mat-spinner></mat-spinner>
@@ -30,5 +39,11 @@
     {{ twitPostResponseHeaders }}
     <br>
     {{ twitPostResponseBody | json }}
+
+    <hr>
+
+    {{ twitsGetResponseHeaders }}
+    <br>
+    {{ twitsGetResponseBody | json}}
 
 </main>

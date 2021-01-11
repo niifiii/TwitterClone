@@ -1,39 +1,31 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, take } from 'rxjs/operators';
 
-export interface ITwit {
+interface ILoginDetails {
   userName: string;
-  content: string;
+  passwordHash: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class TwitService {
+export class LoginService {
 
-  twitsServerUrl: string = 'http://localhost:3000/api';
+  loginServerUrl: string = 'http://localhost:3000/api';
 
   constructor(private _http: HttpClient) { }
 
-  /** POST: add a new twit to the database @ http://localhost:3000/api/post-twit */
-  postTwit(body: ITwit): Observable<HttpResponse<any>> {
+  /** POST: login to the database @ http://localhost:3000/api/post-twit */
+  postLogin(body: ILoginDetails): Observable<HttpResponse<any>> {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Accept', 'application/json')
-    return this._http.post<any>(`${this.twitsServerUrl}/post-twit`, body, { headers, observe: 'response' }).pipe(
+    return this._http.post<any>(`${this.loginServerUrl}/authentication`, body, { headers, observe: 'response' }).pipe(
         take(1),
         catchError(this.handleError)
       );
   }
   
-  /** GET: get Twits of a userName */
-  getTwits(userName, params) {
-    return this._http.get<any>(`${this.twitsServerUrl}/twits/${userName}`,{ params: params, observe: 'response' }).pipe(
-      take(1),
-      catchError(this.handleError)
-    )
-  }
-
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

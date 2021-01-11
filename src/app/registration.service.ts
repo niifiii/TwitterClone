@@ -1,39 +1,39 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { stringify } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, take } from 'rxjs/operators';
 
-export interface ITwit {
+interface IRegistrationDetails {
   userName: string;
-  content: string;
+  email: string;
+  password: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class TwitService {
+export class RegistrationService {
 
-  twitsServerUrl: string = 'http://localhost:3000/api';
+  registrationServerUrl: string = 'http://localhost:3000/api';
 
   constructor(private _http: HttpClient) { }
 
   /** POST: add a new twit to the database @ http://localhost:3000/api/post-twit */
-  postTwit(body: ITwit): Observable<HttpResponse<any>> {
+  postRegistrationDetails(body: IRegistrationDetails): Observable<HttpResponse<any>> {
+    const params = new HttpParams({fromObject: {
+      userName: body.userName,
+      email: body.email,
+      password: body.password
+    }})
+    const postBody = params.toString()
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Accept', 'application/json')
-    return this._http.post<any>(`${this.twitsServerUrl}/post-twit`, body, { headers, observe: 'response' }).pipe(
+    return this._http.post<any>(`${this.registrationServerUrl}/register`, postBody, { headers, observe: 'response' }).pipe(
         take(1),
         catchError(this.handleError)
       );
   }
   
-  /** GET: get Twits of a userName */
-  getTwits(userName, params) {
-    return this._http.get<any>(`${this.twitsServerUrl}/twits/${userName}`,{ params: params, observe: 'response' }).pipe(
-      take(1),
-      catchError(this.handleError)
-    )
-  }
-
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -49,4 +49,5 @@ export class TwitService {
     return throwError(
       'Something bad happened; please try again later.');
   }
+
 }
