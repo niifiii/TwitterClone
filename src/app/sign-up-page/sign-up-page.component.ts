@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { RegistrationService } from '../registration.service';
 
 import * as bcrypt from 'bcryptjs';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 
 @Component({
@@ -87,5 +87,16 @@ export class SignUpPageComponent implements OnInit {
     }
 
     return 
+  }
+  
+  isLogin() {
+    const token = localStorage.getItem('token')
+    return !!token ? true : false
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (this.isLogin())
+      return false
+    return this._router.parseUrl('/error')
   }
 }

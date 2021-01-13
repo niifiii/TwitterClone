@@ -9,15 +9,15 @@ import { routingComponents } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from "./material/material.module";
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
-import { ErrorPageComponent } from './error-page/error-page.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents,
-    ErrorPageComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -26,7 +26,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     FlexLayoutModule,
     MaterialModule,
     ReactiveFormsModule,
-    HttpClientModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

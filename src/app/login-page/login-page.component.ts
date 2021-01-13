@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -49,10 +49,19 @@ export class LoginPageComponent implements OnInit {
     this._authSvc.login(this.loginForm.get('userName').value, this.loginForm.get('password').value)
       .then(result => {
         console.info('>>> result: ', result)
-        this._router.navigate([ '/admin' ])
+        this._router.navigate([ '/admin', this.loginForm.get('userName').value ])
       })
 	}
 
+  isLogin() {
+    const token = localStorage.getItem('token')
+    return !!token ? true : false
+  }
 
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (this.isLogin())
+      return false
+    return this._router.parseUrl('/error')
+  }
 
 }

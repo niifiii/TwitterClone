@@ -6,3 +6,5 @@ span {
     padding-right: 1rem;
 }
 */
+
+span { cursor: pointer; }

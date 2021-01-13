@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { TwitService } from '../twit.service';
@@ -31,7 +31,8 @@ export class TwitPostsPageComponent implements OnInit, AfterViewInit {
   constructor(private _fb: FormBuilder, 
               //private _http: HttpClient,
               private _twitSvc: TwitService,
-              private _route: ActivatedRoute) { }
+              private _route: ActivatedRoute,
+              private router:Router) { }
 
   ngOnInit(): void {
     //let userName = this._route.snapshot.paramMap.get('userName').toString()
@@ -42,8 +43,7 @@ export class TwitPostsPageComponent implements OnInit, AfterViewInit {
       let userName = params.get('userName')
       this.userName = userName
     })
-
-
+    
     console.log(this.userName) 
 
     this.twitForm = this._fb.group({
@@ -112,4 +112,17 @@ export class TwitPostsPageComponent implements OnInit, AfterViewInit {
       this.twitForm.reset();
       this.toggleSpinner()
   }
+
+  /*
+  isLogin() {
+    const token = localStorage.getItem('token')
+    return !!token ? true : false
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (this.isLogin())
+      return true
+    return this.router.parseUrl('/error')
+  }
+  */
 }

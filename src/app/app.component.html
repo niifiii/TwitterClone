@@ -5,8 +5,8 @@
   <div>
     <span [routerLink]="[ '/landing' ]">Home</span>
     <span [routerLink]="[ '/about' ]">About</span>
-    <span [routerLink]="[ '/sign-up' ]">Sign Up</span><span [routerLink]="[ '/login' ]">Login</span> <!-- toggle --><span [routerLink]="[ '/admin/1' ]">Admin</span>
-    <span [routerLink]="[ '/browse-users' ]">Browse Users</span>
+    <span [routerLink]="[ '/sign-up' ]">Sign Up</span><span [routerLink]="[ '/login' ]">Login</span> <!-- toggle --><span [routerLink]="[ '/admin' ]">Admin</span>
+    <span [routerLink]="[ '/browse-users' ]">Browse Users</span><span (click)='onLogout()'>Logout</span>
   </div>
 </mat-toolbar>
 

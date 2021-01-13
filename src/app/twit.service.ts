@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } 
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, take } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 export interface ITwit {
   userName: string;
@@ -15,11 +16,17 @@ export class TwitService {
 
   twitsServerUrl: string = 'http://localhost:3000/api';
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient, private authSvc: AuthService) { }
 
   /** POST: add a new twit to the database @ http://localhost:3000/api/post-twit */
+  /*AUTH
+    Authorization: Bearer eyJhbGciOiJ...SsxY
+  */
   postTwit(body: ITwit): Observable<HttpResponse<any>> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Accept', 'application/json')
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Accept', 'application/json')
+      .set('Authorization' , `Bearer ${this.authSvc.getToken()}`)
     return this._http.post<any>(`${this.twitsServerUrl}/post-twit`, body, { headers, observe: 'response' }).pipe(
         take(1),
         catchError(this.handleError)
