@@ -1,5 +1,5 @@
 <p>browse-users-page works!</p>
 
-<div>
-    
+<div *ngFor="let user of browseUsersGetResponseBody">
+    <a [routerLink]="[ '/twit-posts', user ]">{{user}}</a>
 </div>

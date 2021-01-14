@@ -45,12 +45,12 @@ export class TwitPostsPageComponent implements OnInit, AfterViewInit {
     })
     
     console.log(this.userName) 
-
+/*
     this.twitForm = this._fb.group({
       userName: this._fb.control('', [Validators.required]),
       content: this._fb.control('', [Validators.required])
     })
-
+*/
     this.getTwits();
   }
 
@@ -83,7 +83,7 @@ export class TwitPostsPageComponent implements OnInit, AfterViewInit {
     }
     
   }
-
+/*
   onSendTwit() {
     this.toggleSpinner()
     const userName = this.twitForm.get('userName').value
@@ -113,6 +113,7 @@ export class TwitPostsPageComponent implements OnInit, AfterViewInit {
       this.toggleSpinner()
   }
 
+  */
   /*
   isLogin() {
     const token = localStorage.getItem('token')

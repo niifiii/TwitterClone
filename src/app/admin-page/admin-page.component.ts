@@ -31,7 +31,7 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   shouldShowSpinner = false;
 
-  userName = ''
+  userName = null
 
   twitsGetResponseHeaders: string[] = []
   twitsGetResponseBody: any = ''
@@ -65,27 +65,42 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isLoggedIn = this._authSvc.isLogin()
 
+/*
     this._route.paramMap.subscribe( (params: ParamMap) => {
       let userName = params.get('userName')
       this.userName = userName
-      console.log(this.isLoggedIn)
-      if (this.userName == null) {this.userName = localStorage.get('userName')}
+      console.log('paramMap', this.isLoggedIn)
+      //if (this.userName == '') {
+      localStorage.set('userName', this.userName)
+      //}
       this.getTwits()
     })
+*/
+    
+    this.userName = this._route.snapshot.paramMap.get("userName")
+    
 
     this.form = this._fb.group({
       username: this._fb.control(''),
       message: this._fb.control('')
     })
     
-    localStorage.setItem('userName', this.userName)
+    //console.log(this.userName)
+
+    if (null != this.userName) {
+      localStorage.setItem('userName', this.userName)
+    }
+
+    if (null == this.userName) {
+      this.userName = localStorage.getItem('userName')
+    }
 
     this.getProfilePic()
 
-    console.log(this.userName) 
+    //console.log(this.userName) 
 
     this.twitForm = this._fb.group({
-      userName: this._fb.control('', [Validators.required]),
+      //userName: this._fb.control('', [Validators.required]),
       content: this._fb.control('', [Validators.required])
     })
 
@@ -93,12 +108,12 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
       profile: ['']
     });
 
-    this.twitsCount = this.getTwitsCount();
+    this.twitsCount = this.getTwitsCount()
+    this.getTwits()
   }
 
   ngAfterViewInit() {
       //this.spinner.nativeElement.style.display = 'none';
-      
   }
 
   ngOnDestroy(): void {
@@ -109,12 +124,12 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.event$.unsubscribe()
       this.event$ = null
     }
-
   }
 
   private getTwits() {
     const params = new HttpParams().set('page','1') //later if hve time do pagination
-    this._twitSvc.getTwits(this.userName, params).subscribe(
+    const userName = localStorage.getItem('userName')
+    this._twitSvc.getTwits(userName, params).subscribe(
       resp => {
         // display its headers
         const keys = resp.headers.keys();
@@ -140,7 +155,7 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSendTwit() {
     this.toggleSpinner()
-    const userName = this.twitForm.get('userName').value
+    const userName = localStorage.getItem('userName')
     const content = this.twitForm.get('content').value
     const params = new HttpParams({fromObject: {userName: userName, content: content}})
     const body = params.toString()
@@ -227,8 +242,9 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getTwitsCount() {
     //if (this.userName == ) habe time thennd o
-    this._twitSvc.getTwitsCount(this.userName).subscribe( (resp) => {
-      this.twitsCount = { ...resp.body };
+    this._twitSvc.getTwitsCount(this.userName).pipe(take(1), catchError(this.handleError)).subscribe( (resp) => {
+      this.twitsCount = [ ...resp.body ][0].totalTwits;
+      console.log(this.twitsCount)
     })
   }
 
@@ -248,7 +264,7 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleConnection() {
     if (this.text == 'Join') {
       this.text = 'Leave'
-      const name = this.form.get('username').value
+      const name = localStorage.getItem('userName')//this.form.get('username').value
       this._chatSvc.join(name)
       // subscribe to incoming messages
       this.event$ = this._chatSvc.event.subscribe(
@@ -271,7 +287,7 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
       //.set('Authorization' , `Bearer ${this._authSvc.getToken()}`)
 
     const params = new HttpParams({fromObject: {
-      userName: this.userName,
+      userName: this.userName
     }})
     
     const postBody = params.toString()
@@ -286,10 +302,11 @@ export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
         `${key}: ${resp.headers.get(key)}`);
 
       // access the body directly, which is typed as `??`.
-      this.profileImgSrc = { ...resp.body }.imageName;
+      this.profileImgSrc = `https://bkt.sfo2.digitaloceanspaces.com/${{ ...resp.body }.imageName}`;
     }
       
     )
   }
+  
 
 }
