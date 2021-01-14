@@ -1,12 +1,15 @@
 <h1> App Component </h1>
 
-<mat-toolbar fxLayoutAlign="space-between center" color='primary' class='navbar'>
-  <div > Twitta 👶👶🏻👶🏼👶🏽👶🏾👶🏿</div>
+<mat-toolbar  color='primary' class='navbar d-flex'> <!-- fxLayoutAlign="space-between center" -->
+  <div > Twitta 🧸</div>
   <div>
-    <span [routerLink]="[ '/landing' ]">Home</span>
-    <span [routerLink]="[ '/about' ]">About</span>
-    <span [routerLink]="[ '/sign-up' ]">Sign Up</span><span [routerLink]="[ '/login' ]">Login</span> <!-- toggle --><span [routerLink]="[ '/admin' ]">Admin</span>
-    <span [routerLink]="[ '/browse-users' ]">Browse Users</span><span (click)='onLogout()'>Logout</span>
+    <span [routerLink]="[ '/landing' ]" class='small'>Home</span>
+    <span [routerLink]="[ '/about' ]" class='small'>About</span>
+    <span [routerLink]="[ '/sign-up' ]" class='small'>Sign Up</span>
+    <span [routerLink]="[ '/login' ]" class='small'>Login</span> <!-- toggle -->
+    <span [routerLink]="[ '/admin' ]" class='small'>Admin</span>
+    <span [routerLink]="[ '/browse-users' ]" class='small'>Browse Users</span>
+    <span (click)='onLogout()' class='small'>Logout</span>
   </div>
 </mat-toolbar>
 

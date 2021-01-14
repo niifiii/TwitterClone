@@ -2,9 +2,10 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot, ParamMap, Router, RouterStateSnapshot } from '@angular/router';
-import { throwError } from 'rxjs';
+import { Subscription, throwError } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
+import { ChatMessage, ChatService } from '../chat.service';
 import { TwitService } from '../twit.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { TwitService } from '../twit.service';
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.css']
 })
-export class AdminPageComponent implements OnInit, AfterViewInit {
+export class AdminPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isLoggedIn: boolean
 
@@ -41,14 +42,19 @@ export class AdminPageComponent implements OnInit, AfterViewInit {
   uploadProfilePicResponseHeaders = []
   uploadProfilePicResponseBody = {} as any
 
+  twitsCount = null
+
   profileImgSrc = ''
+  profileImgHeaders = []
+  PROFILE_IMG_SERVER = 'http://localhost:3000/api/profile-pic'
 
   constructor(private _fb: FormBuilder, 
               private _http: HttpClient,
               private _twitSvc: TwitService,
               private _route: ActivatedRoute,
               private _authSvc: AuthService,
-              private router: Router) {
+              private router: Router,
+              private _chatSvc: ChatService) {
                 //this.isLoggedIn = this._authSvc.isLogin()
   }
 
@@ -62,10 +68,19 @@ export class AdminPageComponent implements OnInit, AfterViewInit {
     this._route.paramMap.subscribe( (params: ParamMap) => {
       let userName = params.get('userName')
       this.userName = userName
-
       console.log(this.isLoggedIn)
+      if (this.userName == null) {this.userName = localStorage.get('userName')}
+      this.getTwits()
     })
 
+    this.form = this._fb.group({
+      username: this._fb.control(''),
+      message: this._fb.control('')
+    })
+    
+    localStorage.setItem('userName', this.userName)
+
+    this.getProfilePic()
 
     console.log(this.userName) 
 
@@ -78,11 +93,23 @@ export class AdminPageComponent implements OnInit, AfterViewInit {
       profile: ['']
     });
 
-    this.getTwits();
+    this.twitsCount = this.getTwitsCount();
   }
 
   ngAfterViewInit() {
       //this.spinner.nativeElement.style.display = 'none';
+      
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    // check if we are connected before unsubscribing
+    if (null != this.event$) {
+      this.event$.unsubscribe()
+      this.event$ = null
+    }
+
   }
 
   private getTwits() {
@@ -197,4 +224,72 @@ export class AdminPageComponent implements OnInit, AfterViewInit {
     return this.router.parseUrl('/error')
   }
   */
+
+  getTwitsCount() {
+    //if (this.userName == ) habe time thennd o
+    this._twitSvc.getTwitsCount(this.userName).subscribe( (resp) => {
+      this.twitsCount = { ...resp.body };
+    })
+  }
+
+  text = 'Join'
+  form: FormGroup
+
+  messages: ChatMessage[] = []
+  event$: Subscription
+
+  sendMessage() {
+    const message = this.form.get('message').value
+    this.form.get('message').reset()
+    console.info('>>> message: ', message)
+    this._chatSvc.sendMessage(message)
+  }
+
+  toggleConnection() {
+    if (this.text == 'Join') {
+      this.text = 'Leave'
+      const name = this.form.get('username').value
+      this._chatSvc.join(name)
+      // subscribe to incoming messages
+      this.event$ = this._chatSvc.event.subscribe(
+        (chat) => {
+          this.messages.unshift(chat)
+        }
+      )
+    } else {
+      this.text = 'Join'
+      this._chatSvc.leave()
+      this.event$.unsubscribe()
+      this.event$ = null
+    }
+  }
+
+  getProfilePic() {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Accept', 'application/json')
+      //.set('Authorization' , `Bearer ${this._authSvc.getToken()}`)
+
+    const params = new HttpParams({fromObject: {
+      userName: this.userName,
+    }})
+    
+    const postBody = params.toString()
+
+    this._http.post<any>(this.PROFILE_IMG_SERVER, postBody, { headers, observe: 'response' }).pipe(
+      take(1),
+      catchError(this.handleError)
+    ).subscribe(resp => {
+      // display its headers
+      const keys = resp.headers.keys();
+      this.profileImgHeaders = keys.map(key =>
+        `${key}: ${resp.headers.get(key)}`);
+
+      // access the body directly, which is typed as `??`.
+      this.profileImgSrc = { ...resp.body }.imageName;
+    }
+      
+    )
+  }
+
 }

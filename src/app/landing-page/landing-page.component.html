@@ -4,7 +4,7 @@ Welcome to Twitta!
 
 <h1>Trending News</h1>
 
-<form name='numArticlesForm' #numArticlesForm="ngForm">
+<form class="d-flex flex-column" name='numArticlesForm' #numArticlesForm="ngForm">
     <h4>Select number of trending news articles to display</h4>
     <mat-form-field appearance="fill">
       <mat-label>Number Of Articles</mat-label>
@@ -26,15 +26,15 @@ Welcome to Twitta!
 
 <div class="d-flex flex-column">
     <div class="p2" *ngFor="let item of articlesGetResponseBody">
-        <p><img class="rounded img-fluid mx-auto d-block" src={{item.urlToImage}}></p>
-        <p>Source Name: {{item.source.name}}</p>
-        <p>Author: {{item.author}}</p>
-        <p>Title: {{item.title}}</p>
-        <p>Description: {{item.description}}</p>
-        <p>URL: <a href="{{item.url}}">{{item.url}}</a></p>
+        <p ><img class="rounded img-fluid mx-auto d-block" src={{item.urlToImage}}></p>
+        <p >Source Name: {{item.source.name}}</p>
+        <p >Author: {{item.author}}</p>
+        <p >Title: {{item.title}}</p>
+        <p >Description: {{item.description}}</p>
+        <p >URL: <a href="{{item.url}}">{{item.url}}</a></p>
 
-        <p>Published At: {{item.publishedAt}}</p>
-        <p>Content: {{item.content}}</p>
+        <p >Published At: {{item.publishedAt}}</p>
+        <p >Content: {{item.content}}</p>
         <hr />
     </div>
 </div>

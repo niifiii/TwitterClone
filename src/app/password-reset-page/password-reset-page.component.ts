@@ -21,12 +21,16 @@ export class PasswordResetPageComponent implements OnInit {
       })
   }
 
-getErrorMessageEmail() {
-  if (this.passwordResetForm.get('email').hasError('required')) {
-    return 'You must enter a value';
+  onResetPassword() {
+    
   }
 
-  return this.passwordResetForm.get('email').hasError('email') ? 'Not a valid email' : '';
-}
+  getErrorMessageEmail() {
+    if (this.passwordResetForm.get('email').hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.passwordResetForm.get('email').hasError('email') ? 'Not a valid email' : '';
+  }
 
 }

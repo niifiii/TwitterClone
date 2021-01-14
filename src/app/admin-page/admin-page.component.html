@@ -1,6 +1,8 @@
 <p>admin-page works!</p>
 isLoggedIn: {{isLoggedIn}}
 <br>
+userName: {{userName}}
+<br>
 uploadProfilePicResponseBody {{uploadProfilePicResponseBody | json}}
 uploadProfilePicResponseHeaders {{uploadProfilePicResponseHeaders}}
 
@@ -16,6 +18,7 @@ uploadProfilePicResponseHeaders {{uploadProfilePicResponseHeaders}}
     <p>20 Following</p>
     <p>161 Followers</p>
 
+    Num Tweets: {{twitsCount | json}}
  
     <div>
         <form [formGroup] = "uploadForm" (ngSubmit)="onUploadProfilePic()">      
@@ -67,5 +70,38 @@ uploadProfilePicResponseHeaders {{uploadProfilePicResponseHeaders}}
     {{ twitsGetResponseHeaders }}
     <br>
     {{ twitsGetResponseBody | json}}
+
+    <hr>
+
+    <h2>My Chat</h2>
+
+    <form [formGroup]="form">
+    <table>
+        <tr>
+        <td>Name:</td>
+        <td>
+            <input type="text" size="30" placeholder="Your name" formControlName="username">
+            <button type="button" (click)="toggleConnection()">
+            <span [innerHTML]="text"></span>
+            </button>
+        </td>
+        </tr>
+        <tr>
+        <td>Message:</td>
+        <td>
+            <input type="text" size="50" placeholder="Your message" formControlName="message">
+            <button type="button" (click)="sendMessage()">
+            Send
+            </button>
+        </td>
+        </tr>
+    </table>
+    </form>
+    <hr>
+    <h3>Chats</h3>
+    <div *ngFor="let m of messages">
+    <code>{{ m.from }}  </code>
+    <span>{{ m.message }}</span>
+    </div>
 
 </main>

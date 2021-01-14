@@ -41,6 +41,13 @@ export class TwitService {
     )
   }
 
+  getTwitsCount(userName) {
+    return this._http.get<any>(`${this.twitsServerUrl}/twits-count/${userName}`, { observe: 'response' }).pipe(
+      take(1),
+      catchError(this.handleError)
+    )
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
